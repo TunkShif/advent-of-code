@@ -1,0 +1,29 @@
+# Compiled bytecode
+*.byte
+*.cm*
+
+# Compiled native code
+*.o
+*.so
+*.cmx
+*.cma
+*.cmxa
+*.cmi
+*.cmt
+*.cmti
+
+# Dune build directory
+/_build/
+
+# OPAM build directory
+/_opam/
+
+# Editor-specific files
+.vscode/
+.idea/
+
+# Logs and other generated files
+*.log
+*.install
+*.install.log
+*.install.ocaml
