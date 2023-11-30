@@ -11,10 +11,12 @@ defmodule Day3 do
 
   def test() do
     157 = sum_of_items(@sample)
+    70 = sum_of_badges(@sample)
   end
 
   def solve() do
     sum_of_items(@input) |> IO.puts()
+    sum_of_badges(@input) |> IO.puts()
   end
 
   defp priority(item) when item in ?a..?z, do: item - 96
@@ -32,6 +34,18 @@ defmodule Day3 do
     for {items, len} <- rucksacks_from(input) do
       {first, last} = Enum.split(items, div(len, 2))
       MapSet.intersection(MapSet.new(first), MapSet.new(last)) |> MapSet.to_list() |> List.first()
+    end
+    |> Enum.sum()
+  end
+
+  defp sum_of_badges(input) do
+    for group <- rucksacks_from(input) |> Enum.chunk_every(3) do
+      [{first, _}, {second, _}, {third, _}] = group
+
+      MapSet.intersection(MapSet.new(first), MapSet.new(second))
+      |> MapSet.intersection(MapSet.new(third))
+      |> MapSet.to_list()
+      |> List.first()
     end
     |> Enum.sum()
   end
