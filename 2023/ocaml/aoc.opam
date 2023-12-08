@@ -13,6 +13,8 @@ depends: [
   "ocaml"
   "dune" {>= "3.11"}
   "ppx_deriving"
+  "alcotest" {with-test}
+  "ppx_inline_alcotest" {with-test}
   "odoc" {with-doc}
 ]
 build: [

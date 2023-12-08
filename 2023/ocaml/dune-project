@@ -19,7 +19,12 @@
  (name aoc)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune ppx_deriving)
+ (depends
+  ocaml
+  dune
+  ppx_deriving
+  (alcotest :with-test)
+  (ppx_inline_alcotest :with-test))
  (tags
   (topics "to describe" your project)))
 
