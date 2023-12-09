@@ -15,3 +15,21 @@
  (name run_01)
  (modules run_01)
  (libraries solution_01))
+
+(library
+ (name solution_02)
+ (modules solution_02)
+ (libraries aoc)
+ (inline_tests)
+ (preprocess
+  (pps
+   ppx_deriving.show
+   ppx_deriving.eq
+   ppx_deriving.ord
+   ppx_deriving.make
+   ppx_inline_alcotest)))
+
+(executable
+ (name run_02)
+ (modules run_02)
+ (libraries solution_02))
