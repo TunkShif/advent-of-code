@@ -19,7 +19,7 @@
 (library
  (name solution_02)
  (modules solution_02)
- (libraries aoc)
+ (libraries aoc angstrom)
  (inline_tests)
  (preprocess
   (pps

@@ -22,6 +22,7 @@
  (depends
   ocaml
   dune
+  angstrom
   ppx_deriving
   (alcotest :with-test)
   (ppx_inline_alcotest :with-test))

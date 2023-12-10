@@ -12,6 +12,7 @@ bug-reports: "https://github.com/username/reponame/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.11"}
+  "angstrom"
   "ppx_deriving"
   "alcotest" {with-test}
   "ppx_inline_alcotest" {with-test}
