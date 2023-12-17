@@ -6,6 +6,15 @@ module Game = struct
 
     let can_play round =
       round.red <= 12 && round.green <= 13 && round.blue <= 14
+
+    let power round = round.red * round.green * round.blue
+
+    let max a b =
+      {
+        red = max a.red b.red;
+        green = max a.green b.green;
+        blue = max a.blue b.blue;
+      }
   end
 
   type t = { id : int; rounds : Round.t list } [@@deriving show]
@@ -41,20 +50,21 @@ module Game = struct
   end
 
   let parse = Parser.parse
+  let rounds game = game.rounds
   let can_play game = List.for_all Round.can_play game.rounds
 end
 
-module Part_1 = struct
-  let sample =
-    {|
+let sample =
+  {|
 Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
 Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
 Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
 Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
     |}
-    |> String.trim
+  |> String.trim
 
+module Part_1 = struct
   let solve input =
     input
     |> String.split_on_char '\n'
@@ -63,4 +73,18 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
     |> List.fold_left Game.(fun acc game -> acc + game.id) 0
 
   let%test "part 1" = Alcotest.(check int) "part 1 sample" 8 (solve sample)
+end
+
+let compose f g x = f (g x)
+
+module Part_2 = struct
+  let solve input =
+    input
+    |> String.split_on_char '\n'
+    |> List.map (compose Game.rounds Game.parse)
+    |> List.map (List.fold_left Game.Round.max Game.Round.empty)
+    |> List.map Game.Round.power
+    |> List.fold_left ( + ) 0
+
+  let%test "part 2" = Alcotest.(check int) "part 2 sample" 2286 (solve sample)
 end
