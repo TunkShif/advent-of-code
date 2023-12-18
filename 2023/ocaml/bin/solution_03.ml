@@ -35,54 +35,79 @@ module Engine = struct
 
   let is_digit c = c >= '0' && c <= '9'
   let is_symbol c = not (is_digit c || c == '.')
+  let is_gear c = c == '*'
+  let is_inbound t x y = x < t.rows && y < t.cols
   let mark t i j = t.marker.(i).(j) <- true
 
-  let get_part t i j =
+  let find_part t i j =
     let row = t.schematic.(i) in
     let length = String.length row in
-    let rec get_part_aux s l r acc =
+    let rec find_part_aux s l r acc =
       if l > 0 && is_digit s.[l - 1] then
         let () = mark t i (l - 1) in
-        get_part_aux s (l - 1) r (Char.escaped s.[l - 1] ^ acc)
+        find_part_aux s (l - 1) r (Char.escaped s.[l - 1] ^ acc)
       else if r < length - 1 && is_digit s.[r + 1] then
         let () = mark t i (r + 1) in
-        get_part_aux s l (r + 1) (acc ^ Char.escaped s.[r + 1])
+        find_part_aux s l (r + 1) (acc ^ Char.escaped s.[r + 1])
       else int_of_string acc
     in
-    get_part_aux row j j (Char.escaped row.[j])
+    find_part_aux row j j (Char.escaped row.[j])
 
-  let get_parts t =
+  let find_parts t =
     let parts = ref [] in
-    let is_inbound x y = x < t.rows && y < t.cols in
     for i = 0 to t.rows - 1 do
       for j = 0 to t.cols - 1 do
-        if is_symbol t.schematic.(i).[j] then
+        if is_symbol t.schematic.(i).[j] then (
+          let gear = t.schematic.(i).[j] in
+          let numbers = ref [] in
           List.iter
             (fun (x, y) ->
               let i' = i + x in
               let j' = j + y in
               if
-                is_inbound i' j'
+                is_inbound t i' j'
                 && is_digit t.schematic.(i').[j']
                 && not t.marker.(i').(j')
               then
                 let part =
                   mark t i' j';
-                  get_part t i' j'
+                  find_part t i' j'
                 in
-                parts := part :: !parts)
-            dirs
+                numbers := part :: !numbers)
+            dirs;
+          parts := (gear, !numbers) :: !parts)
       done
     done;
     !parts
 
   let%test "engine" =
-    Alcotest.(check int) "get_part" 467 (get_part (parse "467..114.") 0 1)
+    Alcotest.(check int) "get_part" 467 (find_part (parse "467..114.") 0 1)
 end
+
+let sum list = List.fold_left ( + ) 0 list
+let prod list = List.fold_left ( * ) 1 list
 
 module Part_1 = struct
   let solve input =
-    input |> Engine.parse |> Engine.get_parts |> List.fold_left ( + ) 0
+    input
+    |> Engine.parse
+    |> Engine.find_parts
+    |> List.fold_left (fun acc (_, numbers) -> acc + sum numbers) 0
 
   let%test "part 1" = Alcotest.(check int) "part 1 sample" 4361 (solve sample)
+end
+
+module Part_2 = struct
+  let solve input =
+    let filter_gear (gear, numbers) =
+      if gear == '*' && List.length numbers == 2 then Some (prod numbers)
+      else None
+    in
+    input
+    |> Engine.parse
+    |> Engine.find_parts
+    |> List.filter_map filter_gear
+    |> sum
+
+  let%test "part 2" = Alcotest.(check int) "part 2 sample" 467835 (solve sample)
 end
