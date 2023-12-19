@@ -1,7 +1,7 @@
 (library
  (name solution_01)
  (modules solution_01)
- (libraries aoc)
+ (libraries aoc base)
  (inline_tests)
  (preprocess
   (pps
@@ -19,7 +19,7 @@
 (library
  (name solution_02)
  (modules solution_02)
- (libraries aoc angstrom)
+ (libraries aoc base angstrom)
  (inline_tests)
  (preprocess
   (pps
@@ -37,7 +37,7 @@
 (library
  (name solution_03)
  (modules solution_03)
- (libraries aoc)
+ (libraries aoc base)
  (inline_tests)
  (preprocess
   (pps
@@ -51,3 +51,21 @@
  (name run_03)
  (modules run_03)
  (libraries solution_03))
+
+(library
+ (name solution_04)
+ (modules solution_04)
+ (libraries aoc base angstrom)
+ (inline_tests)
+ (preprocess
+  (pps
+   ppx_deriving.show
+   ppx_deriving.eq
+   ppx_deriving.ord
+   ppx_deriving.make
+   ppx_inline_alcotest)))
+
+(executable
+ (name run_04)
+ (modules run_04)
+ (libraries solution_04))

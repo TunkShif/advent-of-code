@@ -1,4 +1,5 @@
-let is_digit = function '0' .. '9' -> true | _ -> false
+open Base
+
 let to_integer char = Char.code char - Char.code '0'
 
 module Part_1 = struct
@@ -22,10 +23,7 @@ treb7uchet
     (to_integer left_digit * 10) + to_integer right_digit
 
   let solve input =
-    input
-    |> String.split_on_char '\n'
-    |> List.map find_value
-    |> List.fold_left ( + ) 0
+    input |> String.split_on_char '\n' |> List.map find_value |> sum
 
   let%test "part 1" = Alcotest.(check int) "part 1 sample" 142 (solve sample)
 
@@ -70,10 +68,7 @@ zoneight234
     (digits |> List.hd) + ((digits |> List.rev |> List.hd) * 10)
 
   let solve input =
-    input
-    |> String.split_on_char '\n'
-    |> List.map find_value
-    |> List.fold_left ( + ) 0
+    input |> String.split_on_char '\n' |> List.map find_value |> sum
 
   let%test "part 1" = Alcotest.(check int) "part 2 sample" 281 (solve sample)
 

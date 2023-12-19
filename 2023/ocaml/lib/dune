@@ -1,5 +1,6 @@
 (library
  (name aoc)
+ (modules aoc)
  (public_name aoc)
  (inline_tests)
  (preprocess
@@ -9,3 +10,7 @@
    ppx_deriving.ord
    ppx_deriving.make
    ppx_inline_alcotest)))
+
+(library
+ (name base)
+ (modules base))

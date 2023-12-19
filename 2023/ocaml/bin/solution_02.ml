@@ -1,3 +1,5 @@
+open Base
+
 module Game = struct
   module Round = struct
     type t = { red : int; green : int; blue : int } [@@deriving show]
@@ -22,7 +24,6 @@ module Game = struct
   module Parser = struct
     open Angstrom
 
-    let is_digit = function '0' .. '9' -> true | _ -> false
     let integer = take_while1 is_digit >>| int_of_string
     let red = integer <* string " red" >>| fun i -> `Red i
     let green = integer <* string " green" >>| fun i -> `Green i
@@ -84,7 +85,7 @@ module Part_2 = struct
     |> List.map (compose Game.rounds Game.parse)
     |> List.map (List.fold_left Game.Round.max Game.Round.empty)
     |> List.map Game.Round.power
-    |> List.fold_left ( + ) 0
+    |> sum
 
   let%test "part 2" = Alcotest.(check int) "part 2 sample" 2286 (solve sample)
 end

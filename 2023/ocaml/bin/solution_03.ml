@@ -1,3 +1,5 @@
+open Base
+
 let sample =
   {|
 467..114..
@@ -33,7 +35,6 @@ module Engine = struct
     let marker = Array.make_matrix rows cols false in
     { schematic; rows; cols; marker }
 
-  let is_digit c = c >= '0' && c <= '9'
   let is_symbol c = not (is_digit c || c == '.')
   let is_gear c = c == '*'
   let is_inbound t x y = x < t.rows && y < t.cols
@@ -84,7 +85,6 @@ module Engine = struct
     Alcotest.(check int) "get_part" 467 (find_part (parse "467..114.") 0 1)
 end
 
-let sum list = List.fold_left ( + ) 0 list
 let prod list = List.fold_left ( * ) 1 list
 
 module Part_1 = struct
